@@ -32,14 +32,6 @@ def t_NAME(t):
 
 def t_FUNCTION(t):
     r'cos|sin|tan|exp|sqrt|log|ln'
-    fn = None
-    if t.value == 'log':
-        fn = lambda x: math.log(x, 10)
-    elif t.value == 'ln':
-        fn = math.log
-    else:
-        fn = getattr(math, t.value)
-    t.value = (t.value, fn)
 
     return t
 
@@ -120,7 +112,14 @@ def p_expression_expr(tokens):
     print(tokens[1])
 def p_function(tokens):
     """expr : FUNCTION expr"""
-    tokens[0] = tokens[1][1](tokens[2])
+    fn = None
+    if tokens[1] == 'log':
+        fn = lambda x: math.log(x, 10)
+    elif tokens[1] == 'ln':
+        fn = math.log
+    else:
+        fn = getattr(math, tokens[1])
+    tokens[0] = fn(tokens[2])
 def p_add(tokens):
     """expr : expr '+' expr"""
     tokens[0] = tokens[1] + tokens[3]
@@ -169,22 +168,3 @@ while True:
     if not s:
         continue
     yacc.parse(s)
-
-
-# def test(a):
-
-#     lexer.input(a)
-
-#     while True:
-#         tok = lexer.token()
-#         if not tok: 
-#             break      # No more input
-#         print(tok)
-
-# # test("sin")
-
-# # test("sinus")
-
-# # test("1sin")
-
-# test("ssss4 +2 **6=")
