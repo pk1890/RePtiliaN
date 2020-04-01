@@ -1,0 +1,19 @@
+
+{
+    def factorial = {
+        if(n < 0){
+            -1;
+        };
+        res = 1;
+        for(i = 1; i <= n; i = i 1 +){
+            res = res i *;
+        };
+        res;
+    };
+    
+    n = 5;
+    run factorial;
+
+    n = 10;
+    run factorial;
+}

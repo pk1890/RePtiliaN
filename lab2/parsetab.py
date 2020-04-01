@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = "BINOP DOUBLE FOR FUNCTION IF INTEGER NAME RELOP WHILEblock : '{' program '}'\n             | statement \n       program : statement ';' program\n               | statement ';'statement : exprstatement : relationstatement : IF '(' relation ')' block statement : WHILE '(' relation ')' block statement : FOR '(' statement ';' relation ';' statement ')' block relation : expr RELOP exprstatement : NAME '=' exprexpr : name\n            | number\n            | name expr\n            | number expr\n            | sinop expr\n            | binop expr\n            | sinop \n            | binop sinop : FUNCTIONbinop : BINOPname : NAMEnumber : INTEGER\n            | DOUBLE"
+_lr_signature = "BINOP DEF DOUBLE FOR FUNCTION IF INTEGER NAME RELOP RUN WHILEblock : '{' program '}'\n             | statement \n       program : statement ';' program\n               | statement ';'statement : exprstatement : relationstatement : DEF NAME '=' blockstatement : RUN NAMEstatement : IF '(' relation ')' block statement : WHILE '(' relation ')' block statement : FOR '(' statement ';' relation ';' statement ')' block relation : expr RELOP exprstatement : NAME '=' exprexpr : name\n            | number\n            | name expr\n            | number expr\n            | sinop expr\n            | binop expr\n            | sinop \n            | binop sinop : FUNCTIONbinop : BINOPname : NAMEnumber : INTEGER\n            | DOUBLE"
     
-_lr_action_items = {'{':([0,39,40,47,],[2,2,2,2,]),'IF':([0,2,23,31,39,40,45,47,],[6,6,6,6,6,6,6,6,]),'WHILE':([0,2,23,31,39,40,45,47,],[7,7,7,7,7,7,7,7,]),'FOR':([0,2,23,31,39,40,45,47,],[8,8,8,8,8,8,8,8,]),'NAME':([0,2,9,10,11,12,13,14,15,16,17,20,21,22,23,24,26,31,39,40,41,45,47,],[9,9,-22,26,26,26,26,-23,-24,-20,-21,26,26,26,9,26,-22,9,9,9,26,9,9,]),'INTEGER':([0,2,9,10,11,12,13,14,15,16,17,20,21,22,23,24,26,31,39,40,41,45,47,],[14,14,-22,14,14,14,14,-23,-24,-20,-21,14,14,14,14,14,-22,14,14,14,14,14,14,]),'DOUBLE':([0,2,9,10,11,12,13,14,15,16,17,20,21,22,23,24,26,31,39,40,41,45,47,],[15,15,-22,15,15,15,15,-23,-24,-20,-21,15,15,15,15,15,-22,15,15,15,15,15,15,]),'FUNCTION':([0,2,9,10,11,12,13,14,15,16,17,20,21,22,23,24,26,31,39,40,41,45,47,],[16,16,-22,16,16,16,16,-23,-24,-20,-21,16,16,16,16,16,-22,16,16,16,16,16,16,]),'BINOP':([0,2,9,10,11,12,13,14,15,16,17,20,21,22,23,24,26,31,39,40,41,45,47,],[17,17,-22,17,17,17,17,-23,-24,-20,-21,17,17,17,17,17,-22,17,17,17,17,17,17,]),'$end':([1,3,4,5,9,10,11,12,13,14,15,16,17,25,26,27,28,29,30,32,37,42,43,48,],[0,-2,-5,-6,-22,-12,-13,-18,-19,-23,-24,-20,-21,-14,-22,-15,-16,-17,-1,-10,-11,-7,-8,-9,]),';':([3,4,5,9,10,11,12,13,14,15,16,17,19,25,26,27,28,29,30,32,36,37,42,43,44,48,],[-2,-5,-6,-22,-12,-13,-18,-19,-23,-24,-20,-21,31,-14,-22,-15,-16,-17,-1,-10,41,-11,-7,-8,45,-9,]),')':([3,4,5,9,10,11,12,13,14,15,16,17,25,26,27,28,29,30,32,33,35,37,42,43,46,48,],[-2,-5,-6,-22,-12,-13,-18,-19,-23,-24,-20,-21,-14,-22,-15,-16,-17,-1,-10,39,40,-11,-7,-8,47,-9,]),'RELOP':([4,9,10,11,12,13,14,15,16,17,25,26,27,28,29,34,],[20,-22,-12,-13,-18,-19,-23,-24,-20,-21,-14,-22,-15,-16,-17,20,]),'(':([6,7,8,],[21,22,23,]),'=':([9,],[24,]),'}':([18,31,38,],[30,-4,-3,]),}
+_lr_action_items = {'{':([0,37,45,46,53,],[2,2,2,2,2,]),'DEF':([0,2,28,35,37,45,46,51,53,],[6,6,6,6,6,6,6,6,6,]),'RUN':([0,2,28,35,37,45,46,51,53,],[8,8,8,8,8,8,8,8,8,]),'IF':([0,2,28,35,37,45,46,51,53,],[9,9,9,9,9,9,9,9,9,]),'WHILE':([0,2,28,35,37,45,46,51,53,],[10,10,10,10,10,10,10,10,10,]),'FOR':([0,2,28,35,37,45,46,51,53,],[11,11,11,11,11,11,11,11,11,]),'NAME':([0,2,6,7,8,12,13,14,15,16,17,18,19,22,24,26,27,28,30,35,37,45,46,47,51,53,],[7,7,23,-24,25,30,30,30,30,-25,-26,-22,-23,30,30,30,30,7,-24,7,7,7,7,30,7,7,]),'INTEGER':([0,2,7,12,13,14,15,16,17,18,19,22,24,26,27,28,30,35,37,45,46,47,51,53,],[16,16,-24,16,16,16,16,-25,-26,-22,-23,16,16,16,16,16,-24,16,16,16,16,16,16,16,]),'DOUBLE':([0,2,7,12,13,14,15,16,17,18,19,22,24,26,27,28,30,35,37,45,46,47,51,53,],[17,17,-24,17,17,17,17,-25,-26,-22,-23,17,17,17,17,17,-24,17,17,17,17,17,17,17,]),'FUNCTION':([0,2,7,12,13,14,15,16,17,18,19,22,24,26,27,28,30,35,37,45,46,47,51,53,],[18,18,-24,18,18,18,18,-25,-26,-22,-23,18,18,18,18,18,-24,18,18,18,18,18,18,18,]),'BINOP':([0,2,7,12,13,14,15,16,17,18,19,22,24,26,27,28,30,35,37,45,46,47,51,53,],[19,19,-24,19,19,19,19,-25,-26,-22,-23,19,19,19,19,19,-24,19,19,19,19,19,19,19,]),'$end':([1,3,4,5,7,12,13,14,15,16,17,18,19,25,29,30,31,32,33,34,36,38,44,48,49,54,],[0,-2,-5,-6,-24,-14,-15,-20,-21,-25,-26,-22,-23,-8,-16,-24,-17,-18,-19,-1,-12,-13,-7,-9,-10,-11,]),';':([3,4,5,7,12,13,14,15,16,17,18,19,21,25,29,30,31,32,33,34,36,38,42,44,48,49,50,54,],[-2,-5,-6,-24,-14,-15,-20,-21,-25,-26,-22,-23,35,-8,-16,-24,-17,-18,-19,-1,-12,-13,47,-7,-9,-10,51,-11,]),')':([3,4,5,7,12,13,14,15,16,17,18,19,25,29,30,31,32,33,34,36,38,39,41,44,48,49,52,54,],[-2,-5,-6,-24,-14,-15,-20,-21,-25,-26,-22,-23,-8,-16,-24,-17,-18,-19,-1,-12,-13,45,46,-7,-9,-10,53,-11,]),'RELOP':([4,7,12,13,14,15,16,17,18,19,29,30,31,32,33,40,],[22,-24,-14,-15,-20,-21,-25,-26,-22,-23,-16,-24,-17,-18,-19,22,]),'=':([7,23,],[24,37,]),'(':([9,10,11,],[26,27,28,]),'}':([20,35,43,],[34,-4,-3,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'block':([0,39,40,47,],[1,42,43,48,]),'statement':([0,2,23,31,39,40,45,47,],[3,19,36,19,3,3,46,3,]),'expr':([0,2,10,11,12,13,20,21,22,23,24,31,39,40,41,45,47,],[4,4,25,27,28,29,32,34,34,4,37,4,4,4,34,4,4,]),'relation':([0,2,21,22,23,31,39,40,41,45,47,],[5,5,33,35,5,5,5,5,44,5,5,]),'name':([0,2,10,11,12,13,20,21,22,23,24,31,39,40,41,45,47,],[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,]),'number':([0,2,10,11,12,13,20,21,22,23,24,31,39,40,41,45,47,],[11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,]),'sinop':([0,2,10,11,12,13,20,21,22,23,24,31,39,40,41,45,47,],[12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,]),'binop':([0,2,10,11,12,13,20,21,22,23,24,31,39,40,41,45,47,],[13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,]),'program':([2,31,],[18,38,]),}
+_lr_goto_items = {'block':([0,37,45,46,53,],[1,44,48,49,54,]),'statement':([0,2,28,35,37,45,46,51,53,],[3,21,42,21,3,3,3,52,3,]),'expr':([0,2,12,13,14,15,22,24,26,27,28,35,37,45,46,47,51,53,],[4,4,29,31,32,33,36,38,40,40,4,4,4,4,4,40,4,4,]),'relation':([0,2,26,27,28,35,37,45,46,47,51,53,],[5,5,39,41,5,5,5,5,5,50,5,5,]),'name':([0,2,12,13,14,15,22,24,26,27,28,35,37,45,46,47,51,53,],[12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,]),'number':([0,2,12,13,14,15,22,24,26,27,28,35,37,45,46,47,51,53,],[13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,]),'sinop':([0,2,12,13,14,15,22,24,26,27,28,35,37,45,46,47,51,53,],[14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,]),'binop':([0,2,12,13,14,15,22,24,26,27,28,35,37,45,46,47,51,53,],[15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,]),'program':([2,35,],[20,43,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -31,24 +31,26 @@ _lr_productions = [
   ('block -> statement','block',1,'p_block','rpn_calc.py',89),
   ('program -> statement ; program','program',3,'p_block','rpn_calc.py',90),
   ('program -> statement ;','program',2,'p_block','rpn_calc.py',91),
-  ('statement -> expr','statement',1,'p_statement_expr','rpn_calc.py',101),
-  ('statement -> relation','statement',1,'p_statement_relation','rpn_calc.py',105),
-  ('statement -> IF ( relation ) block','statement',5,'p_statement_cond','rpn_calc.py',109),
-  ('statement -> WHILE ( relation ) block','statement',5,'p_statement_while','rpn_calc.py',115),
-  ('statement -> FOR ( statement ; relation ; statement ) block','statement',9,'p_statement_for','rpn_calc.py',120),
-  ('relation -> expr RELOP expr','relation',3,'p_relation','rpn_calc.py',128),
-  ('statement -> NAME = expr','statement',3,'p_statement_assignment','rpn_calc.py',132),
-  ('expr -> name','expr',1,'p_expr','rpn_calc.py',138),
-  ('expr -> number','expr',1,'p_expr','rpn_calc.py',139),
-  ('expr -> name expr','expr',2,'p_expr','rpn_calc.py',140),
-  ('expr -> number expr','expr',2,'p_expr','rpn_calc.py',141),
-  ('expr -> sinop expr','expr',2,'p_expr','rpn_calc.py',142),
-  ('expr -> binop expr','expr',2,'p_expr','rpn_calc.py',143),
-  ('expr -> sinop','expr',1,'p_expr','rpn_calc.py',144),
-  ('expr -> binop','expr',1,'p_expr','rpn_calc.py',145),
-  ('sinop -> FUNCTION','sinop',1,'p_sinop','rpn_calc.py',152),
-  ('binop -> BINOP','binop',1,'p_binop','rpn_calc.py',156),
-  ('name -> NAME','name',1,'p_var','rpn_calc.py',160),
-  ('number -> INTEGER','number',1,'p_number','rpn_calc.py',164),
-  ('number -> DOUBLE','number',1,'p_number','rpn_calc.py',165),
+  ('statement -> expr','statement',1,'p_statement_expr','rpn_calc.py',102),
+  ('statement -> relation','statement',1,'p_statement_relation','rpn_calc.py',106),
+  ('statement -> DEF NAME = block','statement',4,'p_statement_fundef','rpn_calc.py',110),
+  ('statement -> RUN NAME','statement',2,'p_statement_run','rpn_calc.py',113),
+  ('statement -> IF ( relation ) block','statement',5,'p_statement_cond','rpn_calc.py',117),
+  ('statement -> WHILE ( relation ) block','statement',5,'p_statement_while','rpn_calc.py',123),
+  ('statement -> FOR ( statement ; relation ; statement ) block','statement',9,'p_statement_for','rpn_calc.py',128),
+  ('relation -> expr RELOP expr','relation',3,'p_relation','rpn_calc.py',136),
+  ('statement -> NAME = expr','statement',3,'p_statement_assignment','rpn_calc.py',140),
+  ('expr -> name','expr',1,'p_expr','rpn_calc.py',146),
+  ('expr -> number','expr',1,'p_expr','rpn_calc.py',147),
+  ('expr -> name expr','expr',2,'p_expr','rpn_calc.py',148),
+  ('expr -> number expr','expr',2,'p_expr','rpn_calc.py',149),
+  ('expr -> sinop expr','expr',2,'p_expr','rpn_calc.py',150),
+  ('expr -> binop expr','expr',2,'p_expr','rpn_calc.py',151),
+  ('expr -> sinop','expr',1,'p_expr','rpn_calc.py',152),
+  ('expr -> binop','expr',1,'p_expr','rpn_calc.py',153),
+  ('sinop -> FUNCTION','sinop',1,'p_sinop','rpn_calc.py',160),
+  ('binop -> BINOP','binop',1,'p_binop','rpn_calc.py',164),
+  ('name -> NAME','name',1,'p_var','rpn_calc.py',168),
+  ('number -> INTEGER','number',1,'p_number','rpn_calc.py',172),
+  ('number -> DOUBLE','number',1,'p_number','rpn_calc.py',173),
 ]
