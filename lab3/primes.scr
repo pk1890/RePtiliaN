@@ -1,0 +1,30 @@
+{
+    def primes = {
+        i = 2;
+        wrong = 0;
+        while(i < n){
+            if(n i / floor i * == n){
+                wrong = 1;
+            };
+            i = i 1 +;
+        };
+        if(wrong == 0){
+            res = 1;
+        };
+        if(wrong != 0){
+            res = 0;
+        };
+    };
+
+
+    def printPrimes = {
+        for(n = 1; n < m; n = n 1 +){
+            run primes;
+            if(res == 1){
+                n;
+            };
+        };
+    };
+    m = 100;
+    run printPrimes;
+}
