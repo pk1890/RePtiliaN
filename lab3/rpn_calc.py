@@ -3,14 +3,17 @@
 import sys
 import math
 import time
+import pprint
 
 sys.path.insert(0, "../..")
 
-keywords = ('IF', 'WHILE', 'FOR', 'DEF', 'RUN') + ('AND', 'OR', 'NOR', 'NAND')
+typenames = ("INT_T", "FLOAT_T", "STRING_T")
+types=  ("INT", "FLOAT", "STRING", "BOOLEAN")
+keywords = ('IF', 'WHILE', 'FOR', 'DEF', 'RUN') + ('AND', 'OR', 'NOR', 'NAND') + types
 
 tokens = (
-    'NAME', 'INTEGER', 'DOUBLE', 'FUNCTION', 'RELOP', "BINOP", "STRING", "BOOLEAN"
-) + keywords 
+    'NAME', 'FUNCTION', 'RELOP', "BINOP"
+) + keywords + typenames
 
 
 def t_RELOP(t):
@@ -24,13 +27,14 @@ def t_BINOP(t):
 
 literals = ['=', '(', ')', ';', '}', '{']
 
-functions=['cos','sin','exp','sqrt','log', 'tan', 'ln', 'floor']
+functions=['cos','sin','exp','sqrt','log', 'tan', 'ln', 'floor', 'toFloat', 'toInt', 'toString']
 
 # Tokens
 
 
-def t_STRING(t):
+def t_STRING_T(t):
     r'"[^"]*"'
+    t.value = t.value[1:-1]
     return t
 
 
@@ -56,7 +60,7 @@ def t_FUNCTION(t):
     return t
 
 
-def t_DOUBLE(t):
+def t_FLOAT_T(t):
 
     r'\d*\.\d+|\d+\.'
 
@@ -64,7 +68,7 @@ def t_DOUBLE(t):
     return t
 
 
-def t_INTEGER(t):
+def t_INT_T(t):
 
     r'\d+'
 
@@ -167,17 +171,37 @@ def p_relation(tokens):
     """relation : expr RELOP expr"""
     tokens[0] = ("RELATION", tokens[1], tokens[2], tokens[3])
 
+def p_typename(tokens):
+    """typename : INT
+                | FLOAT
+                | STRING"""
+    tokens[0] = tokens[1].upper()
+
+def p_rvalue(tokens):
+    """rvalue : expr
+              | boolean
+              | number"""
+    tokens[0] = tokens[1]
+
+def p_declaration(tokens):
+    """statement : typename NAME '=' rvalue"""
+    tokens[0] = ("DECLARATION", tokens[1], tokens[2], tokens[4])
+
 def p_statement_assignment(tokens):
-    """statement : NAME '=' expr"""
+    """statement : NAME '=' rvalue"""
     name = tokens[1]
     value = tokens[3]
     tokens[0] = ("ASSIGNMENT", name, value)
 
+
+
 def p_expr(tokens):
     """expr : name
             | number
+            | string
             | name expr
             | number expr
+            | string expr
             | sinop expr
             | binop expr
             | sinop 
@@ -199,11 +223,22 @@ def p_var(tokens):
     "name : NAME"
     tokens[0] = ("NAME", tokens[1])
 
-def p_number(tokens):
-    """number : INTEGER
-            | DOUBLE"""
-    tokens[0] = ("NUMBER", tokens[1])
+def p_string(tokens):
+    """string : STRING_T"""
+    tokens[0] = ("STRING", str(tokens[1]))
 
+def p_integer(tokens):
+    """integer : INT_T"""
+    tokens[0] = ("INT", tokens[1])
+
+def p_float(tokens):
+    """float : FLOAT_T"""
+    tokens[0] = ("FLOAT", tokens[1])
+
+def p_number(tokens):
+    """number : float 
+              | integer"""
+    tokens[0] = tokens[1]
 
 parser = yacc.yacc()
 # s = input("> ")
@@ -217,13 +252,31 @@ parser = yacc.yacc()
 
 
 def execute(statement):
-    print(statement)
+   
     if statement[0] == "BLOCK":
-        [execute(stmt) for stmt in statement[1]]
+        [execute(stmt) for stmt in statement[1]]    
+    elif statement[0] == "DECLARATION":
+        val = execute(statement[3]) 
+        if val is not None:
+            if statement[2] in variables.keys():
+                raise(ValueError("variable already assigned"))
+            else:
+
+                if statement[1] != val[0]:
+                    raise(ValueError("Cannot assign %s to %s" % (val[0], statement[1])))
+
+                variables[statement[2]] = val 
+                # print("assigned %s = %s" % (statement[2], val))
     elif statement[0] == "ASSIGNMENT":
         val = execute(statement[2]) 
         if val is not None:
-            variables[statement[1]] = ("VAR", val) 
+            if statement[1] not in variables.keys():
+                raise(ValueError("%s not declared" % (statement[1])))
+            if val[0] != variables[statement[1]][0]:
+                raise(ValueError("Cannot assign %s to %s" % (val[0],  variables[statement[1]][0])))
+
+
+            variables[statement[1]] = val 
     elif statement[0] == "DEF":
         val = statement[2] 
         if val is not None:
@@ -243,7 +296,7 @@ def execute(statement):
                 return
 
     elif statement[0] == "PRINTLN":
-        print(execute(statement[1]))
+        print(execute(statement[1])[1])
     elif statement[0] == "IF":
         if execute(statement[1]):
             execute(statement[2])
@@ -281,6 +334,8 @@ def execute(statement):
             return not (execute(statement[1]) or execute(statement[3]))
         if statement[2][1] == "NAND":
             return not (execute(statement[1]) and execute(statement[3]))
+    elif statement[0] in types:
+        return statement
     elif statement[0] == "EXPR":
         stack = []
         calc_expr(statement[1], stack)
@@ -296,14 +351,15 @@ def execute(statement):
 def calc_expr(expression, stack):
     # print(stack)
     for expr in expression:
-        # print(expr)
-        if expr[0] == "NUMBER":
-            stack.append(expr[1])
+        # print(expr[0])
+        if expr[0] in types:
+            stack.append(expr)
+            # print(stack)
         elif expr[0] == "NAME":
             try:
                 type_, val = variables[expr[1]]
-                if type_ == "VAR":
-                    stack.append(val)
+                if type_ in types:
+                    stack.append((type_, val))
                 elif type_ == "FUN":
                     print(f"'{expr[1]}' is a function, not variable")
                     return
@@ -313,8 +369,13 @@ def calc_expr(expression, stack):
                 print(f"Undefined variable:'{expr[1]}'")
                 return
         elif expr[0] == "BINOP":
-            arg1 = stack.pop()
-            arg2 = stack.pop()
+            type1, arg1 = stack.pop()
+            type2, arg2 = stack.pop()
+
+            if type1 != type2:
+                raise(ValueError("%s does not match type with %s" % (type1, type2)))
+
+            restype = None
             if expr[1] == "+":
                 res = arg2 + arg1
             if expr[1] == "-":
@@ -323,18 +384,36 @@ def calc_expr(expression, stack):
                 res = arg2 * arg1
             if expr[1] == "/":
                 res = arg2 / arg1
+                restype = "FLOAT"
             if expr[1] == "^":
                 res = arg2 ** arg1
-            stack.append(res)
+            if restype == None:
+                restype = type1
+            
+            stack.append((restype, res))
+
         elif expr[0] == "SINOP":
             fn = None
+            rettype = "FLOAT"
             if expr[1] == 'log':
                 fn = lambda x: math.log(x, 10)
             elif expr[1] == 'ln':
                 fn = math.log
+            elif expr[1] == 'floor':
+                fn = math.floor
+                rettype = "INT"
+            elif expr[1] == 'foFloat':
+                fn = lambda x: float(x)
+                rettype = "FLOAT"
+            elif expr[1] == 'toInt':
+                rettype = "INT"
+                fn = lambda x: int(x)
+            elif expr[1] == 'toString':
+                rettype = "STRING"
+                fn = lambda x: str(x)
             else:
                 fn = getattr(math, expr[1])
-            stack.append(fn(stack.pop()))
+            stack.append((rettype, fn(stack.pop()[1])))
         elif expr[0] == "EXPR":
             calc_expr(expr[1], stack)
 
@@ -344,6 +423,7 @@ if len(sys.argv) == 2:
         try:
             data = open(sys.argv[1]).read()
             program = yacc.parse(data)
+            # pprint.pprint(program) # UNCOMMENT TO SEE AST
             if program:
                 execute(program)
         except FileNotFoundError:
@@ -357,6 +437,7 @@ else:
         if not s:
             continue
         program = yacc.parse(s)
+        # pprint.pprint(program) # UNCOMMENT TO SEE AST
         if program:
             execute(program)
 

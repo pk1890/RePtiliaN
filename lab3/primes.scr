@@ -1,4 +1,10 @@
 {
+    int i = 0;
+    int wrong = 0;
+    int res = 0;
+    int n = 0;
+    int m = 0;
+
     def primes = {
         i = 2;
         wrong = 0;
