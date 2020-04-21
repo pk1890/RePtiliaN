@@ -402,7 +402,7 @@ def calc_expr(expression, stack):
             elif expr[1] == 'floor':
                 fn = math.floor
                 rettype = "INT"
-            elif expr[1] == 'foFloat':
+            elif expr[1] == 'toFloat':
                 fn = lambda x: float(x)
                 rettype = "FLOAT"
             elif expr[1] == 'toInt':

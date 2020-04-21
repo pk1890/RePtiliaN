@@ -34,9 +34,67 @@ python rpn_calc.py primes.scr
 ...
 ```
 
-## Example: factorial
+### Strongly typed
 
-### Code:
+```
+> int a = 3
+> float b = 5.0
+> string c = "Ala ma kota"
+> float d = 4 toFloat
+> a
+3
+> b
+5.0
+> c
+Ala ma kota
+> d
+4.0
+> a = 5
+> a
+5
+> a = 6.0
+Traceback (most recent call last):
+  File ".\rpn_calc.py", line 442, in <module>
+    execute(program)
+  File ".\rpn_calc.py", line 257, in execute
+    [execute(stmt) for stmt in statement[1]]
+  File ".\rpn_calc.py", line 257, in <listcomp>
+    [execute(stmt) for stmt in statement[1]]
+  File ".\rpn_calc.py", line 276, in execute
+    raise(ValueError("Cannot assign %s to %s" % (val[0],  variables[statement[1]][0])))
+ValueError: Cannot assign FLOAT to INT
+```
+
+```
+> int a = "Ala ma kota"
+Traceback (most recent call last):
+  File ".\rpn_calc.py", line 442, in <module>
+    execute(program)
+  File ".\rpn_calc.py", line 257, in execute
+    [execute(stmt) for stmt in statement[1]]
+  File ".\rpn_calc.py", line 257, in <listcomp>
+    [execute(stmt) for stmt in statement[1]]
+  File ".\rpn_calc.py", line 266, in execute
+    raise(ValueError("Cannot assign %s to %s" % (val[0], statement[1])))
+ValueError: Cannot assign STRING to INT
+```
+
+## Overloaded operators
+```
+> "Ala " "ma" "Kota" + +
+Ala maKota
+> 2 3 +
+5
+> 2.0 3.0 +
+5.0
+> "Ala " "ma " + 2 3 ^ toString + " kotów" +
+Ala ma 8 kotów
+>
+```
+
+### Example: factorial
+
+#### Code:
 
 ```
 {
@@ -67,14 +125,14 @@ python rpn_calc.py primes.scr
 
 As we see in line ` n toString text + " = " + res toString +;` the `+` operator is overloaded, but strongly typed.
 
-### Result
+#### Result
 ```
 ....\lab3> py .\rpn_calc.py .\factorial.scr
 5! = 120
 10! = 3628800
 ```
 
-### AST of code:
+#### AST of code:
 
 To see AST of loaded program uncomment every line with `# UNCOMMENT TO SEE AST`
 
