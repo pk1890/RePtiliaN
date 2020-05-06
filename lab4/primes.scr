@@ -1,0 +1,22 @@
+def primes(int n){
+    int i = 2;
+    int isPrime = 1;
+    while(i < n){
+        if(n i / floor i * == n){
+            isPrime = 0;
+        };
+        i = i 1 +;
+    };
+    isPrime;
+};
+
+
+def printPrimes (int n) {
+    for(int i = 1; i < n; i = i 1 +){
+        if(run primes(i) == 1){
+            print i;
+        };
+    };
+};
+
+run printPrimes(100);

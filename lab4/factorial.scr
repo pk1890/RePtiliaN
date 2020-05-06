@@ -1,0 +1,16 @@
+def factorial (int n) {
+    string text = "!";
+    int res = 1;
+    if(n < 0){
+        print "VALUE LESS THAN ZERO";
+        res = 0;
+    };
+    for(int i = 1; i <= n; i = i 1 +){
+        res = res i *;
+    };
+    print n toString text + " = " + res toString +;
+};
+
+for(int i = 3; i <= 6; i = i 1 +){
+    run factorial(i);
+};

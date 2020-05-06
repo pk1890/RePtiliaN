@@ -1,0 +1,12 @@
+int g = 42;
+
+def addTwo(int a, int b){
+    a b +;
+};
+
+def addGlobal(int a){
+    a g +;
+};
+
+print run addTwo(2, 2);
+print run addGlobal(8);
