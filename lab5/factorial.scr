@@ -8,7 +8,7 @@ def factorial (int n) {
     for(int i = 1; i <= n; i = i 1 +){
         res = res i *;
     };
-    print n toString text + " = " + toS restring +;
+    print n toString text + " = " + res toString +;
 };
 
 for(int i = 3; i <= 6; i = i 1 +){

@@ -1,0 +1,18 @@
+
+def add (int n, int m){
+    n m +;
+};
+
+def fibonacci (int n){
+    int ret = n;
+    if(n > 1){
+        int elem1 = run fibonacci(n 1 -);
+        int elem2 = run fibonacci(n 2 -);
+        ret = run add(elem1, elem2);
+    };
+    ret;
+};
+
+for(int n = 0; n < 10; n = n 1 +){
+    print run fibonacci(n);
+};

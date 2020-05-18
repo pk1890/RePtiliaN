@@ -1,0 +1,13 @@
+int a = 5;
+print a;
+{
+    int b = 2;
+    int a = 1000;
+    print b;
+
+    {
+        print a;
+    }
+}
+print a;
+print b;
