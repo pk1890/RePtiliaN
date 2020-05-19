@@ -98,7 +98,8 @@ lexer = lex.lex()
 import ply.yacc as yacc
 
 used_variables = []
-used_expressions = {}
+used_constant_expressions = {}
+not_constatnt_expressions = []
 
 
 precedence = (
@@ -270,11 +271,33 @@ def p_expr(tokens):
             | binop """
 
     elems = tokens[1:]
-    for elem in elems:
-        if(elem[0] == "NAME" and elem[1] not in used_variables):
-            used_variables.append(elem[1])
     tokens[0] = ("EXPR", tuple(elems))
+    for elem in elems:
+        if(elem[0] == "NAME"):
+            if elem[1] not in used_variables:
+                used_variables.append(elem[1])
+            not_constatnt_expressions.append(hash(tokens[0]))
+        elif(elem[0] == "EXPR" and hash(elem) in not_constatnt_expressions):
+            not_constatnt_expressions.append(hash(tokens[0]))
+    if len(elems) == 2 and elems[1][0] == "EXPR" and hash(elems[1]) not in not_constatnt_expressions and hash(tokens[0]) not in not_constatnt_expressions:
+        print("XDDDDDDDDDDDDDDDDDDDDD")
+        try:
+            stack = []
 
+            calc_expr(tokens[0][1], stack)
+            print(stack)
+            if len(stack) == 1:
+                r = stack.pop()
+                
+                used_constant_expressions[tokens[0]] = r
+                tokens[0] = r
+        except IndexError:
+            pass
+
+
+
+    
+    # print("CONST EXPR", tokens[0]) if hash(tokens[0]) not in not_constatnt_expressions else print("VAR EXPR", tokens[0])
 
 def p_sinop(tokens):
     """sinop : FUNCTION"""
@@ -363,8 +386,8 @@ def flattenList(l, acc):
         return flattenList(li, acc)
 
 def execute(statement):
-    # pprint.pprint(statement)
-    # print("=============")
+    pprint.pprint(statement)
+    print("=============")
     global variables
     global contextStack
     if statement[0] == "BLOCK":
@@ -489,12 +512,20 @@ def execute(statement):
     elif statement[0] in types:
         return statement
     elif statement[0] == "EXPR":
+
+        stat_hash = hash(statement)
+
+        if stat_hash in used_constant_expressions.keys():
+            return used_constant_expressions[stat_hash]
+
         stack = []
         calc_expr(statement[1], stack)
         if len(stack) == 1:
             r = stack.pop()
             # print("Poping" )
             # print(r)
+            if stat_hash not in not_constatnt_expressions:
+                used_constant_expressions[stat_hash] = r
             return r
         else:
             print(f"Invalid stack state: {stack}")
@@ -502,6 +533,7 @@ def execute(statement):
 
 def calc_expr(expression, stack):
     # print(stack)
+    # print(expression)
     global variables
     for expr in expression:
         # print(expr[0])
